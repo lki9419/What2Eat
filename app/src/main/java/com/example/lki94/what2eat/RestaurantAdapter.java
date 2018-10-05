@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
     private OnItemClickListener mListener;
@@ -33,7 +34,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             nameTextView = (TextView) itemView.findViewById(R.id.restaurant_name);
             addressTextView = (TextView) itemView.findViewById(R.id.restaurant_address);
             cuisinesTextView = (TextView) itemView.findViewById(R.id.restaurant_cuisines);
-//            averageCostTextView = (TextView) itemView.findViewById(R.id.restaurant_averageCost);
+            averageCostTextView = (TextView) itemView.findViewById(R.id.restaurant_averageCost);
 
         }
     }
@@ -73,9 +74,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
         TextView textView3 = viewHolder.cuisinesTextView;
         textView3.setText(restaurantItem.getCuisines());
-//
-//        TextView textView4 = viewHolder.averageCostTextView;
-//        textView4.setText(restaurantItem.getAverageCost());
+
+        TextView textView4 = viewHolder.averageCostTextView;
+        textView4.setText("Average Cost: " + String.format("%d", restaurantItem.getAverageCost()));
 
 
     }

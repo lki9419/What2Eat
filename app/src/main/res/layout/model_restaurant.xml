@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="25dp"
@@ -10,37 +10,36 @@
     <TextView
         android:id="@+id/restaurant_name"
         android:text="Hello World!"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="24sp"/>
     <TextView
         android:id="@+id/restaurant_address"
         android:text="Hello World!"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="20sp"/>
     <TextView
         android:id="@+id/restaurant_cuisines"
         android:text="Hello World!"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="20sp"/>
     <TextView
         android:id="@+id/restaurant_averageCost"
         android:text="Hello World!"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="20sp"/>
-    <TextView
-        android:id="@+id/restaurant_userRating"
-        android:text="Hello World!"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="20sp"/>
-
+    <!--<TextView-->
+        <!--android:id="@+id/restaurant_userRating"-->
+        <!--android:text="Hello World!"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:textSize="20sp"/>-->
 </LinearLayout>
