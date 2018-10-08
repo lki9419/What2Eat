@@ -35,7 +35,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             addressTextView = (TextView) itemView.findViewById(R.id.restaurant_address);
             cuisinesTextView = (TextView) itemView.findViewById(R.id.restaurant_cuisines);
             averageCostTextView = (TextView) itemView.findViewById(R.id.restaurant_averageCost);
-
         }
     }
 
@@ -78,7 +77,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         TextView textView4 = viewHolder.averageCostTextView;
         textView4.setText("Average Cost: " + String.format("%d", restaurantItem.getAverageCost()));
 
-
     }
 
     @Override
@@ -89,6 +87,5 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     public void updateAdapter() {
         notifyDataSetChanged();
     }
-
 
 }

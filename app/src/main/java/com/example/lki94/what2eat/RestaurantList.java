@@ -1,15 +1,9 @@
 package com.example.lki94.what2eat;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,61 +37,29 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
-public class MainActivity extends AppCompatActivity {
+public class RestaurantList extends AppCompatActivity {
 
-    private FusedLocationProviderClient client;
-    private TextView location_name;
+    List<RestaurantModel> restaurants = new ArrayList<>();
+    RecyclerView rvRestaurants;
+    RestaurantAdapter adapter;
 
-    private final String API_URL = "https://developers.zomato.com/api/v2.1/geocode?lat=38.026115&lon=-78.513447";
-
-    String latitude = "";
-    String longitude = "";
+    String latitude;
+    String longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_restaurant_list);
 
-        location_name = (TextView) findViewById(R.id.location_name);
+        rvRestaurants = (RecyclerView) findViewById(R.id.rvRestaurants);
 
-        client = LocationServices.getFusedLocationProviderClient(this);
+        Intent intent = getIntent();
+        latitude = intent.getStringExtra("LATITUDE");
+        longitude = intent.getStringExtra("LONGITUDE");
+        final String url = "https://developers.zomato.com/api/v2.1/geocode?lat=" + latitude + "&lon=" + longitude;
 
-        Button button = findViewById(R.id.change_location_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                client.getLastLocation().addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if(location!=null){
-                            latitude = Double.toString(location.getLatitude());
-                            longitude = Double.toString(location.getLongitude());
-                            final String url = "https://developers.zomato.com/api/v2.1/geocode?lat=" + latitude + "&lon=" + longitude;
-                            requestInfo(url);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    public void searchList(View view) {
-        if(latitude == "" || longitude == ""){
-            Toast.makeText(this, "No Location Found!",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            Intent intent = new Intent(view.getContext(), RestaurantList.class);
-            intent.putExtra("LATITUDE", latitude);
-            intent.putExtra("LONGITUDE", longitude);
-            startActivityForResult(intent, 2);
-        }
+        requestInfo(url);
     }
 
     private void requestInfo(String url) {
@@ -132,7 +93,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void renderInfo(JSONObject response) {
         try {
-            location_name.setText("Current Location: " + response.getJSONObject("location").getString("city_name"));
+
+            JSONArray parentArray = response.getJSONArray("nearby_restaurants");
+            for(int i = 0; i < parentArray.length(); i++) {
+                JSONObject finalObject = parentArray.getJSONObject(i);
+                RestaurantModel restaurantModel = new RestaurantModel();
+
+                restaurantModel.setName(finalObject.getJSONObject("restaurant").getString("name"));
+                restaurantModel.setAddress(finalObject.getJSONObject("restaurant").getJSONObject("location").getString("address"));
+                restaurantModel.setCuisines(finalObject.getJSONObject("restaurant").getString("cuisines"));
+                restaurantModel.setAverageCost(finalObject.getJSONObject("restaurant").getInt("average_cost_for_two"));
+                restaurantModel.setUserRating(finalObject.getJSONObject("restaurant").getJSONObject("user_rating").getDouble("aggregate_rating"));
+                restaurantModel.setImage(finalObject.getJSONObject("restaurant").getString("photos_url"));
+
+                restaurants.add(restaurantModel);
+            }
+
+            adapter = new RestaurantAdapter(this, restaurants);
+            rvRestaurants.setAdapter(adapter);
+            rvRestaurants.setLayoutManager(new LinearLayoutManager(this));
 
         } catch (Exception e){
             Log.e("What2Eat", "Fields not found in the JSON data");

@@ -35,7 +35,7 @@ public class RestaurantModel {
         return averageCost;
     }
     public void setAverageCost(int raverageCost) {
-        this.averageCost = raverageCost;
+        this.averageCost = raverageCost/2;
     }
 
     public double getUserRating() {
