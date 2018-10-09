@@ -1,9 +1,13 @@
 package com.example.lki94.what2eat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +42,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class RestaurantList extends AppCompatActivity {
 
@@ -60,6 +66,20 @@ public class RestaurantList extends AppCompatActivity {
         final String url = "https://developers.zomato.com/api/v2.1/geocode?lat=" + latitude + "&lon=" + longitude;
 
         requestInfo(url);
+
+        Button button = findViewById(R.id.pick_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), SearchActivity.class);
+                intent.putExtra("LATITUDE", latitude);
+                intent.putExtra("LONGITUDE", longitude);
+
+                ArrayList<RestaurantModel> restaurants2 = new ArrayList<RestaurantModel> (restaurants);
+                intent.putParcelableArrayListExtra("RESTAURANTS", restaurants2);
+                startActivityForResult(intent, 3);
+            }
+        });
     }
 
     private void requestInfo(String url) {
@@ -93,7 +113,6 @@ public class RestaurantList extends AppCompatActivity {
 
     private void renderInfo(JSONObject response) {
         try {
-
             JSONArray parentArray = response.getJSONArray("nearby_restaurants");
             for(int i = 0; i < parentArray.length(); i++) {
                 JSONObject finalObject = parentArray.getJSONObject(i);
