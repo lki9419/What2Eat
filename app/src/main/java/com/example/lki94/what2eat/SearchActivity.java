@@ -43,6 +43,8 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
             }
         }
 
+        cuisines.add("All CATEGORIES");
+
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cuisines);
 

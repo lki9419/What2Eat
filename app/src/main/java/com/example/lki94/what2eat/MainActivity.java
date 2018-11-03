@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "No Location Found!",
                     Toast.LENGTH_LONG).show();
         } else {
-            Intent intent = new Intent(view.getContext(), RestaurantList.class);
+            Intent intent = new Intent(view.getContext(), PickActivity.class); //RestaurantList
             intent.putExtra("LATITUDE", latitude);
             intent.putExtra("LONGITUDE", longitude);
             startActivityForResult(intent, 2);

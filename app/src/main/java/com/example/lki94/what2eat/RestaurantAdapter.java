@@ -27,14 +27,28 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         public TextView addressTextView;
         public TextView cuisinesTextView;
         public TextView averageCostTextView;
+        public TextView ratingView;
 
-        public ViewHolder (View itemView) {
+        public ViewHolder (View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             nameTextView = (TextView) itemView.findViewById(R.id.restaurant_name);
             addressTextView = (TextView) itemView.findViewById(R.id.restaurant_address);
             cuisinesTextView = (TextView) itemView.findViewById(R.id.restaurant_cuisines);
             averageCostTextView = (TextView) itemView.findViewById(R.id.restaurant_averageCost);
+            ratingView = (TextView) itemView.findViewById(R.id.restaurant_userRating);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(v, position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -57,7 +71,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
         View restaurantView = inflater.inflate(R.layout.model_restaurant, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(restaurantView);
+        ViewHolder viewHolder = new ViewHolder(restaurantView, mListener);
         return viewHolder;
     }
 
@@ -76,6 +90,14 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
         TextView textView4 = viewHolder.averageCostTextView;
         textView4.setText("Average Cost: " + String.format("%d", restaurantItem.getAverageCost()));
+
+        TextView textView5 = viewHolder.ratingView;
+
+        if(restaurantItem.getUserRating() == 0.0) {
+            textView5.setText("User Rating: N/A");
+        } else {
+            textView5.setText("User Rating: " + String.format("%1$,.1f", restaurantItem.getUserRating()));
+        }
 
     }
 

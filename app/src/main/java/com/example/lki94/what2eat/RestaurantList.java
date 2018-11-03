@@ -52,6 +52,7 @@ public class RestaurantList extends AppCompatActivity {
 
     String latitude;
     String longitude;
+    String cuisine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,9 @@ public class RestaurantList extends AppCompatActivity {
         Intent intent = getIntent();
         latitude = intent.getStringExtra("LATITUDE");
         longitude = intent.getStringExtra("LONGITUDE");
-        final String url = "https://developers.zomato.com/api/v2.1/geocode?lat=" + latitude + "&lon=" + longitude;
+        cuisine = intent.getStringExtra("CUISINE");
+        //https://developers.zomato.com/api/v2.1/search?lat=38.026023&lon=-78.5157717&cuisines=168
+        final String url = "https://developers.zomato.com/api/v2.1/search?lat=" + latitude + "&lon=" + longitude + "&cuisines=" + cuisine;
 
         requestInfo(url);
 
@@ -113,7 +116,7 @@ public class RestaurantList extends AppCompatActivity {
 
     private void renderInfo(JSONObject response) {
         try {
-            JSONArray parentArray = response.getJSONArray("nearby_restaurants");
+            JSONArray parentArray = response.getJSONArray("restaurants");
             for(int i = 0; i < parentArray.length(); i++) {
                 JSONObject finalObject = parentArray.getJSONObject(i);
                 RestaurantModel restaurantModel = new RestaurantModel();
@@ -131,6 +134,28 @@ public class RestaurantList extends AppCompatActivity {
             adapter = new RestaurantAdapter(this, restaurants);
             rvRestaurants.setAdapter(adapter);
             rvRestaurants.setLayoutManager(new LinearLayoutManager(this));
+
+            adapter.setOnItemClickListener(new RestaurantAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, int position) {
+//                    String name = bucketItems.get(position).getName();
+//                    String description = bucketItems.get(position).getbDescription();
+//                    double latitude = bucketItems.get(position).getbLatitude();
+//                    double longitude = bucketItems.get(position).getbLongitude();
+//
+//                    Intent intent = new Intent(v.getContext(), EditItemActivity.class);
+//                    intent.putExtra("NAME", name);
+//                    intent.putExtra("DESCRIPTION", description);
+//                    intent.putExtra("LATITUDE", latitude);
+//                    intent.putExtra("LONGITUDE", longitude);
+//                    intent.putExtra("POSITION", position);
+//
+//                    startActivityForResult(intent, 3);
+
+                    //bucketItems.get(position).getName();
+                }
+
+            });
 
         } catch (Exception e){
             Log.e("What2Eat", "Fields not found in the JSON data");
